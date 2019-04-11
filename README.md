@@ -9,7 +9,7 @@ You can also deploy Kubernetes using juju and conjure, but that is the easy way 
 
 # Kubernetes The Hard Way
 
-This tutorial walks you through setting up Kubernetes the hard way in a single host using LXC containers. This guide is not for people looking for a fully automated command to bring up a Kubernetes cluster. If that's what you are looking for, then check out [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or the [Getting Started Guides](http://kubernetes.io/docs/getting-started-guides/).
+This tutorial walks you through setting up Kubernetes the hard way in a single host using LXC containers. This guide is not for people looking for a fully automated command to bring up a Kubernetes cluster. If that's what you are looking for, then check out [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or the [Getting Started Guides](http://kubernetes.io/docs/getting-started-guides/). For a complete deployment using juju on LXD, you can use [conjure](https://tutorials.ubuntu.com/tutorial/install-kubernetes-with-conjure-up#0) Please note that the deployment with conjure is slightly differen than this tutorial and uses different components and versions.
 
 Kubernetes The Hard Way is optimized for learning, which means taking the long route to ensure you understand each task required to bootstrap a Kubernetes cluster.
 
