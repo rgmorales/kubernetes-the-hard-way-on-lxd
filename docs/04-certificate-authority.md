@@ -142,7 +142,7 @@ cfssl gencert \
   -config=ca-config.json \
   -hostname=worker-${i},${EXTERNAL_IP},${INTERNAL_IP} \
   -profile=kubernetes \
-  worker-${i}-csr.json | cfssljson -bare ${instance}
+  worker-${i}-csr.json | cfssljson -bare worker-${i}
 done
 ```
 
