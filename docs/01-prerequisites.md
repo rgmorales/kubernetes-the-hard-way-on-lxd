@@ -86,19 +86,3 @@ Check the profile content with:
 lxc profile show kube-profile
 ``` 
 
-Create the two interfaces to be used by the containers, one interface has NAT and the other is going to be our internal network:
-
-Internal interface:
-```
-```
-
-External interface:
-```
-
-```
-
-# Creating the containers
-
-## Controllers
-
-## Workers
