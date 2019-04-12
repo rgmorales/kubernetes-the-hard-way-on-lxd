@@ -263,7 +263,7 @@ cat > kube-scheduler-csr.json <<EOF
       "C": "US",
       "L": "Plano",
       "O": "system:kube-scheduler",
-      "OU": "Kubernetes The Hard Way",
+      "OU": "Kubernetes The Hard Way on LXD",
       "ST": "Texas"
     }
   ]
@@ -297,9 +297,7 @@ Generate the Kubernetes API Server certificate and private key:
 ```
 {
 
-KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
-  --region $(gcloud config get-value compute/region) \
-  --format 'value(address)')
+KUBERNETES_PUBLIC_ADDRESS=192.168.0.101
 
 cat > kubernetes-csr.json <<EOF
 {
@@ -311,10 +309,10 @@ cat > kubernetes-csr.json <<EOF
   "names": [
     {
       "C": "US",
-      "L": "Portland",
+      "L": "Plano",
       "O": "Kubernetes",
-      "OU": "Kubernetes The Hard Way",
-      "ST": "Oregon"
+      "OU": "Kubernetes The Hard Way on LXD",
+      "ST": "Texas"
     }
   ]
 }
@@ -324,7 +322,7 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=10.32.0.1,10.240.0.10,10.240.0.11,10.240.0.12,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,kubernetes.default \
+  -hostname=10.0.1.10,10.0.2.20,10.0.2.21,10.0.2.22,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,kubernetes.default \
   -profile=kubernetes \
   kubernetes-csr.json | cfssljson -bare kubernetes
 
@@ -357,10 +355,10 @@ cat > service-account-csr.json <<EOF
   "names": [
     {
       "C": "US",
-      "L": "Portland",
+      "L": "Plano",
       "O": "Kubernetes",
-      "OU": "Kubernetes The Hard Way",
-      "ST": "Oregon"
+      "OU": "Kubernetes The Hard Way with LXD",
+      "ST": "Texas"
     }
   ]
 }
@@ -390,7 +388,9 @@ Copy the appropriate certificates and private keys to each worker instance:
 
 ```
 for instance in worker-0 worker-1 worker-2; do
-  gcloud compute scp ca.pem ${instance}-key.pem ${instance}.pem ${instance}:~/
+  lxc file push ca.pem ${instance}/home/ubuntu/
+  lxc file push ${instance}-key.pem ${instance}/home/ubuntu/
+  lxc file push ${instance}.pem ${instance}/home/ubuntu/
 done
 ```
 
@@ -398,8 +398,12 @@ Copy the appropriate certificates and private keys to each controller instance:
 
 ```
 for instance in controller-0 controller-1 controller-2; do
-  gcloud compute scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem \
-    service-account-key.pem service-account.pem ${instance}:~/
+  lxc file push ca.pem ${instance}/home/ubuntu/
+  lxc file push ca-key.pem ${instance}/home/ubuntu/
+  lxc file push kubernetes-key.pem ${instance}/home/ubuntu/
+  lxc file push kubernetes.pem ${instance}/home/ubuntu/
+  lxc file push service-account-key.pem ${instance}/home/ubuntu/
+  lxc file push service-account.pem  ${instance}/home/ubuntu/
 done
 ```
 
