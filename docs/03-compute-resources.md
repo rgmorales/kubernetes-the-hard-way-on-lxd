@@ -75,5 +75,86 @@ for i in 0 1 2; do
 done
 ```
 
+Now we will create the yaml files for networking for each container, and push the file to the container. After that, we will apply the networking configuration on each container:
+```
+for i in 0 1 2; do
 
+cat <<EOF |tee 10-lxc.yaml 
+network:
+  version: 2
+  ethernets:
+    eth0:
+       dhcp4: no
+       addresses: [10.0.1.1${i}/24]
+       gateway4: 10.0.1.1
+       nameservers:
+         addresses: [8.8.8.8,8.8.4.4]
+    eth1:
+       dhcp4: no
+       addresses: [10.0.2.1${i}/24]
+       gateway4: 10.0.2.1
+EOF
 
+sudo lxc file push 10-lxc.yaml controller-${i}/etc/netplan/
+
+lxc exec controller-${i} -- sudo netplan apply
+
+cat <<EOF |tee 10-lxc.yaml 
+network:
+  version: 2
+  ethernets:
+    eth0:
+       dhcp4: no
+       addresses: [10.0.1.2${i}/24]
+       gateway4: 10.0.1.1
+       nameservers:
+         addresses: [8.8.8.8,8.8.4.4]
+    eth1:
+       dhcp4: no
+       addresses: [10.0.2.2${i}/24]
+       gateway4: 10.0.2.1
+EOF
+
+sudo lxc file push 10-lxc.yaml worker-${i}/etc/netplan/
+
+lxc exec worker-${i} -- sudo netplan apply
+
+done
+```
+
+Now, stop all containers and start all of them:
+```
+lxc stop --all
+```
+
+```
+lxc start --all
+```
+
+Now list all the containers and check for the network configurations:
+```
+ lxc list
++--------------+---------+------------------+------+------------+-----------+
+|     NAME     |  STATE  |       IPV4       | IPV6 |    TYPE    | SNAPSHOTS |
++--------------+---------+------------------+------+------------+-----------+
+| controller-0 | RUNNING | 10.0.2.10 (eth1) |      | PERSISTENT | 0         |
+|              |         | 10.0.1.10 (eth0) |      |            |           |
++--------------+---------+------------------+------+------------+-----------+
+| controller-1 | RUNNING | 10.0.2.11 (eth1) |      | PERSISTENT | 0         |
+|              |         | 10.0.1.11 (eth0) |      |            |           |
++--------------+---------+------------------+------+------------+-----------+
+| controller-2 | RUNNING | 10.0.2.12 (eth1) |      | PERSISTENT | 0         |
+|              |         | 10.0.1.12 (eth0) |      |            |           |
++--------------+---------+------------------+------+------------+-----------+
+| worker-0     | RUNNING | 10.0.2.20 (eth1) |      | PERSISTENT | 0         |
+|              |         | 10.0.1.20 (eth0) |      |            |           |
++--------------+---------+------------------+------+------------+-----------+
+| worker-1     | RUNNING | 10.0.2.21 (eth1) |      | PERSISTENT | 0         |
+|              |         | 10.0.1.21 (eth0) |      |            |           |
++--------------+---------+------------------+------+------------+-----------+
+| worker-2     | RUNNING | 10.0.2.22 (eth1) |      | PERSISTENT | 0         |
+|              |         | 10.0.1.22 (eth0) |      |            |           |
++--------------+---------+------------------+------+------------+-----------+
+```
+
+You can 
