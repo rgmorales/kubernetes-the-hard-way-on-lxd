@@ -86,3 +86,4 @@ Check the profile content with:
 lxc profile show kube-profile
 ``` 
 
+Next: [Installing the Client Tools](02-client-tools.md)
