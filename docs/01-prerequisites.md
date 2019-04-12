@@ -44,7 +44,9 @@ create the profile configuration yaml with the following content:
 ```
 cat <<EOF |tee kube-profile.yaml 
 config:
-  boot.autostart: "true"
+  limits.cpu: "1"
+  limits.memory.swap: "false"
+  boot.autostart: "false"
   linux.kernel_modules: ip_tables,ip6_tables,netlink_diag,nf_nat,overlay,br_netfilter
   raw.lxc: |
     lxc.apparmor.profile=unconfined
@@ -66,8 +68,37 @@ devices:
 EOF
 ```
 
-Now lets create the profile:
+Now create the profile:
 
+```
+ lxc profile create kube-profile
+```
+
+Set the profile with the properties from the yaml file:
+
+```
+cat kube-profile.yaml | lxc profile edit kube-profile
+```
+
+Check the profile content with:
+
+```
+lxc profile show kube-profile
+``` 
+
+Create the two interfaces to be used by the containers, one interface has NAT and the other is going to be our internal network:
+
+Internal interface:
+```
+```
+
+External interface:
 ```
 
 ```
+
+# Creating the containers
+
+## Controllers
+
+## Workers
