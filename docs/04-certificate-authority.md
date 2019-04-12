@@ -79,10 +79,10 @@ cat > admin-csr.json <<EOF
   "names": [
     {
       "C": "US",
-      "L": "Portland",
+      "L": "Plano",
       "O": "system:masters",
-      "OU": "Kubernetes The Hard Way",
-      "ST": "Oregon"
+      "OU": "Kubernetes The Hard Way on LXD",
+      "ST": "Texas"
     }
   ]
 }
@@ -112,10 +112,10 @@ Kubernetes uses a [special-purpose authorization mode](https://kubernetes.io/doc
 Generate a certificate and private key for each Kubernetes worker node:
 
 ```
-for instance in worker-0 worker-1 worker-2; do
-cat > ${instance}-csr.json <<EOF
+for i in 0 1 2; do
+cat > worker-${i}-csr.json <<EOF
 {
-  "CN": "system:node:${instance}",
+  "CN": "system:node:worker-${i}",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -123,28 +123,26 @@ cat > ${instance}-csr.json <<EOF
   "names": [
     {
       "C": "US",
-      "L": "Portland",
+      "L": "Plano",
       "O": "system:nodes",
-      "OU": "Kubernetes The Hard Way",
-      "ST": "Oregon"
+      "OU": "Kubernetes The Hard Way on LXD",
+      "ST": "Texas"
     }
   ]
 }
 EOF
 
-EXTERNAL_IP=$(gcloud compute instances describe ${instance} \
-  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
+EXTERNAL_IP=10.0.1.2${i}
 
-INTERNAL_IP=$(gcloud compute instances describe ${instance} \
-  --format 'value(networkInterfaces[0].networkIP)')
+INTERNAL_IP=10.0.2.2${i}
 
 cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=${instance},${EXTERNAL_IP},${INTERNAL_IP} \
+  -hostname=worker-${i},${EXTERNAL_IP},${INTERNAL_IP} \
   -profile=kubernetes \
-  ${instance}-csr.json | cfssljson -bare ${instance}
+  worker-${i}-csr.json | cfssljson -bare ${instance}
 done
 ```
 
@@ -176,10 +174,10 @@ cat > kube-controller-manager-csr.json <<EOF
   "names": [
     {
       "C": "US",
-      "L": "Portland",
+      "L": "Plano",
       "O": "system:kube-controller-manager",
-      "OU": "Kubernetes The Hard Way",
-      "ST": "Oregon"
+      "OU": "Kubernetes The Hard Way on LXD",
+      "ST": "Texas"
     }
   ]
 }
@@ -220,10 +218,10 @@ cat > kube-proxy-csr.json <<EOF
   "names": [
     {
       "C": "US",
-      "L": "Portland",
+      "L": "Plano",
       "O": "system:node-proxier",
-      "OU": "Kubernetes The Hard Way",
-      "ST": "Oregon"
+      "OU": "Kubernetes The Hard Way on LXD",
+      "ST": "Texas"
     }
   ]
 }
@@ -263,10 +261,10 @@ cat > kube-scheduler-csr.json <<EOF
   "names": [
     {
       "C": "US",
-      "L": "Portland",
+      "L": "Plano",
       "O": "system:kube-scheduler",
       "OU": "Kubernetes The Hard Way",
-      "ST": "Oregon"
+      "ST": "Texas"
     }
   ]
 }
