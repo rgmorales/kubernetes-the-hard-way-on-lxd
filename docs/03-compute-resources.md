@@ -162,3 +162,4 @@ You can check if the containers can ping each other:
 lxc exec worker-0 -- ping 10.0.2.22
 ```
 
+Next: [Provisioning a CA and Generating TLS Certificates](04-certificate-authority.md)
