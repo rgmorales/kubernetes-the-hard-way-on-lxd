@@ -91,8 +91,7 @@ network:
          addresses: [8.8.8.8,8.8.4.4]
     eth1:
        dhcp4: no
-       addresses: [10.0.2.1${i}/24]
-       gateway4: 10.0.2.1
+       addresses: [10.0.2.1${i}/24]       
 EOF
 
 sudo lxc file push 10-lxc.yaml controller-${i}/etc/netplan/
@@ -111,8 +110,7 @@ network:
          addresses: [8.8.8.8,8.8.4.4]
     eth1:
        dhcp4: no
-       addresses: [10.0.2.2${i}/24]
-       gateway4: 10.0.2.1
+       addresses: [10.0.2.2${i}/24]       
 EOF
 
 sudo lxc file push 10-lxc.yaml worker-${i}/etc/netplan/
