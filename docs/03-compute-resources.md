@@ -157,4 +157,8 @@ Now list all the containers and check for the network configurations:
 +--------------+---------+------------------+------+------------+-----------+
 ```
 
-You can 
+You can check if the containers can ping each other:
+```
+lxc exec worker-0 -- ping 10.0.2.22
+```
+
