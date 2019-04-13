@@ -297,7 +297,7 @@ Generate the Kubernetes API Server certificate and private key:
 ```
 {
 
-KUBERNETES_PUBLIC_ADDRESS=192.168.0.101
+KUBERNETES_PUBLIC_ADDRESS=10.0.1.100
 
 cat > kubernetes-csr.json <<EOF
 {
@@ -322,7 +322,7 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=10.0.1.10,10.0.2.20,10.0.2.21,10.0.2.22,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,kubernetes.default \
+  -hostname=10.0.1.100,10.0.2.20,10.0.2.21,10.0.2.22,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,kubernetes.default \
   -profile=kubernetes \
   kubernetes-csr.json | cfssljson -bare kubernetes
 
