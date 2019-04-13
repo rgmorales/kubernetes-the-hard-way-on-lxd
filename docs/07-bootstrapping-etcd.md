@@ -52,40 +52,40 @@ Create the `etcd.service` systemd unit file for each of the controllers:
 
 ```
 {
-for instance in 0 1 2; do  
+for instance in 0 1 2; do
+  
   INTERNAL_IP=10.0.2.1${instance}
   
   ETCD_NAME=controller-${instance}
   
-  cat <<EOF | tee etcd.service
-    [Unit]
-    Description=etcd
-    Documentation=https://github.com/coreos
-
-    [Service]
-    ExecStart=/usr/local/bin/etcd \\
-      --name ${ETCD_NAME} \\
-      --cert-file=/etc/etcd/kubernetes.pem \\
-      --key-file=/etc/etcd/kubernetes-key.pem \\
-      --peer-cert-file=/etc/etcd/kubernetes.pem \\
-      --peer-key-file=/etc/etcd/kubernetes-key.pem \\
-      --trusted-ca-file=/etc/etcd/ca.pem \\
-      --peer-trusted-ca-file=/etc/etcd/ca.pem \\
-      --peer-client-cert-auth \\
-      --client-cert-auth \\
-      --initial-advertise-peer-urls https://${INTERNAL_IP}:2380 \\
-      --listen-peer-urls https://${INTERNAL_IP}:2380 \\
-      --listen-client-urls https://${INTERNAL_IP}:2379,https://127.0.0.1:2379 \\
-      --advertise-client-urls https://${INTERNAL_IP}:2379 \\
-      --initial-cluster-token etcd-cluster-0 \\
-      --initial-cluster controller-0=https://10.0.2.10:2380,controller-1=https://10.0.2.11:2380,controller-2=https://10.0.2.12:2380 \\
-      --initial-cluster-state new \\
-      --data-dir=/var/lib/etcd
-    Restart=on-failure
-    RestartSec=5
-    [Install]
-    WantedBy=multi-user.target
-  EOF
+cat <<EOF | tee etcd.service
+[Unit]
+Description=etcd
+Documentation=https://github.com/coreos
+[Service]
+ExecStart=/usr/local/bin/etcd \\
+  --name ${ETCD_NAME} \\
+  --cert-file=/etc/etcd/kubernetes.pem \\
+  --key-file=/etc/etcd/kubernetes-key.pem \\
+  --peer-cert-file=/etc/etcd/kubernetes.pem \\
+  --peer-key-file=/etc/etcd/kubernetes-key.pem \\
+  --trusted-ca-file=/etc/etcd/ca.pem \\
+  --peer-trusted-ca-file=/etc/etcd/ca.pem \\
+  --peer-client-cert-auth \\
+  --client-cert-auth \\
+  --initial-advertise-peer-urls https://${INTERNAL_IP}:2380 \\
+  --listen-peer-urls https://${INTERNAL_IP}:2380 \\
+  --listen-client-urls https://${INTERNAL_IP}:2379,https://127.0.0.1:2379 \\
+  --advertise-client-urls https://${INTERNAL_IP}:2379 \\
+  --initial-cluster-token etcd-cluster-0 \\
+  --initial-cluster controller-0=https://10.0.2.10:2380,controller-1=https://10.0.2.11:2380,controller-2=https://10.0.2.12:2380 \\
+  --initial-cluster-state new \\
+  --data-dir=/var/lib/etcd
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=multi-user.target
+EOF
 
   lxc file push etcd.service ${ETCD_NAME}/etc/systemd/system/
   
@@ -99,8 +99,9 @@ done
 {
 for instance in controller-0 controller-1 controller-2; do  
   lxc exec ${instance} -- systemctl daemon-reload
-  lxc exec ${instance} -- enable etcd
-  lxc exec ${instance} -- start etcd  
+  lxc exec ${instance} -- systemctl enable etcd
+  lxc exec ${instance} -- systemctl start etcd
+done
 }
 ```
 
