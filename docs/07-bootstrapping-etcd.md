@@ -109,22 +109,24 @@ done
 
 ## Verification
 
-List the etcd cluster members:
+Login to one of the controllers, or you can check in all of them:
 
 ```
-sudo ETCDCTL_API=3 etcdctl member list \
-  --endpoints=https://127.0.0.1:2379 \
-  --cacert=/etc/etcd/ca.pem \
-  --cert=/etc/etcd/kubernetes.pem \
-  --key=/etc/etcd/kubernetes-key.pem
+lxc exec controller-0 -- sudo /bin/bash
+```
+
+Execute the verification command:
+
+```
+ETCDCTL_API=3 etcdctl member list --endpoints=https://127.0.0.1:2379 --cacert=/etc/etcd/ca.pem --cert=/etc/etcd/kubernetes.pem --key=/etc/etcd/kubernetes-key.pem
 ```
 
 > output
 
 ```
-3a57933972cb5131, started, controller-2, https://10.240.0.12:2380, https://10.240.0.12:2379
-f98dc20bce6225a0, started, controller-0, https://10.240.0.10:2380, https://10.240.0.10:2379
-ffed16798470cab5, started, controller-1, https://10.240.0.11:2380, https://10.240.0.11:2379
+8ec27d324d7508b8, started, controller-0, https://10.0.2.10:2380, https://10.0.2.10:2379
+c18be024472ccb33, started, controller-2, https://10.0.2.12:2380, https://10.0.2.12:2379
+df64d128890b1397, started, controller-1, https://10.0.2.11:2380, https://10.0.2.11:2379
 ```
 
 Next: [Bootstrapping the Kubernetes Control Plane](08-bootstrapping-kubernetes-controllers.md)
