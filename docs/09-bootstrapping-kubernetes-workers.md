@@ -182,6 +182,7 @@ done
 Create the `kubelet-config.yaml` configuration file:
 
 ```
+for instance in worker-0 worker-1 worker-2; do
 cat <<EOF | tee kubelet-config.yaml
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
@@ -200,9 +201,12 @@ clusterDNS:
 podCIDR: "${POD_CIDR}"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
-tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
-tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
+tlsCertFile: "/var/lib/kubelet/${instance}.pem"
+tlsPrivateKeyFile: "/var/lib/kubelet/${instance}-key.pem"
 EOF
+
+lxc file push kubelet-config.yaml ${instance}/var/lib/kubelet/
+done
 ```
 
 > The `resolvConf` configuration is used to avoid loops when using CoreDNS for service discovery on systems running `systemd-resolved`. 
@@ -253,6 +257,9 @@ clientConnection:
   kubeconfig: "/var/lib/kube-proxy/kubeconfig"
 mode: "iptables"
 clusterCIDR: "10.0.2.0/16"
+conntrack:
+  max: 0
+  maxPerCore: 0
 EOF
 ```
 
@@ -281,8 +288,7 @@ for instance in worker-0 worker-1 worker-2; do
     lxc file push 10-bridge.conf ${instance}/etc/cni/net.d/
     lxc file push 99-loopback.conf ${instance}/etc/cni/net.d/
     lxc file push config.toml ${instance}/etc/containerd/
-    lxc file push containerd.service ${instance}/etc/systemd/system/
-    lxc file push kubelet-config.yaml ${instance}/var/lib/kubelet/
+    lxc file push containerd.service ${instance}/etc/systemd/system/    
     lxc file push kubelet.service ${instance}/etc/systemd/system/
     lxc file push kube-proxy-config.yaml ${instance}/var/lib/kube-proxy/
     lxc file push kube-proxy.service ${instance}/etc/systemd/system/
