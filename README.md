@@ -3,7 +3,7 @@ This tutorial is based on Kelsey's tutorial to deploy Kubernetes the hard way, b
 Some modifications in the config files are required in order to run all servers in a single node.
 One major reason for bottleneck can be the disk IO needed, making an SSD or M.2 card a must. While deploying etcd on 3 containers, you will see a lot of io requests to store and retrieve data. Spinning disks will make this impossible to deploy.
 
-The original excellent guide from Kelsey can be found here: [Kubernetes the Hard Way] (https://github.com/kelseyhightower/kubernetes-the-hard-way)
+The original excellent guide from Kelsey can be found here: [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way)
 
 You can also deploy Kubernetes using juju and conjure, but that is the easy way ;)
 
