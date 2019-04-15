@@ -42,6 +42,7 @@ for instance in worker-0 worker-1 worker-2; do
   lxc exec ${instance} -- mkdir -p /var/lib/kube-proxy
   lxc exec ${instance} -- mkdir -p /var/lib/kubernetes
   lxc exec ${instance} -- mkdir -p /var/run/kubernetes
+  lxc exec ${instance} -- mkdir -p /etc/containerd/
 done
 }
 ```
@@ -52,27 +53,38 @@ Install the worker binaries:
 {
   sudo mv runsc-50c283b9f56bb7200938d9e207355f05f79f0d17 runsc
   sudo mv runc.amd64 runc
-  chmod +x kubectl kube-proxy kubelet runc runsc
-  sudo mv kubectl kube-proxy kubelet runc runsc /usr/local/bin/
-  sudo tar -xvf crictl-v1.12.0-linux-amd64.tar.gz -C /usr/local/bin/
-  sudo tar -xvf cni-plugins-amd64-v0.6.0.tgz -C /opt/cni/bin/
-  sudo tar -xvf containerd-1.2.0-rc.0.linux-amd64.tar.gz -C /
+  chmod +x kubectl kube-proxy kubelet runc runsc  
+  
+  for instance in worker-0 worker-1 worker-2; do
+    lxc file push kubectl ${instance}/usr/local/bin/
+    lxc file push kube-proxy ${instance}/usr/local/bin/
+    lxc file push kubelet ${instance}/usr/local/bin/
+    lxc file push runc ${instance}/usr/local/bin/
+    lxc file push runsc ${instance}/usr/local/bin/
+    
+    lxc file push crictl-v1.12.0-linux-amd64.tar.gz ${instance}/home/ubuntu/
+    lxc file push cni-plugins-amd64-v0.6.0.tgz ${instance}/home/ubuntu/
+    lxc file push containerd-1.2.0-rc.0.linux-amd64.tar.gz ${instance}/home/ubuntu/
+    
+    lxc exec ${instance} -- tar -xvf /home/ubuntu/crictl-v1.12.0-linux-amd64.tar.gz -C /usr/local/bin/
+    lxc exec ${instance} -- tar -xvf /home/ubuntu/cni-plugins-amd64-v0.6.0.tgz -C /opt/cni/bin/
+    lxc exec ${instance} -- tar -xvf /home/ubuntu/containerd-1.2.0-rc.0.linux-amd64.tar.gz -C /    
+  done
 }
 ```
 
 ### Configure CNI Networking
 
-Retrieve the Pod CIDR range for the current compute instance:
+For CIDR range we will use the internal network:
 
 ```
-POD_CIDR=$(curl -s -H "Metadata-Flavor: Google" \
-  http://metadata.google.internal/computeMetadata/v1/instance/attributes/pod-cidr)
+POD_CIDR=10.0.2.0/24
 ```
 
 Create the `bridge` network configuration file:
 
 ```
-cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
+cat <<EOF | tee 10-bridge.conf
 {
     "cniVersion": "0.3.1",
     "name": "bridge",
@@ -94,7 +106,7 @@ EOF
 Create the `loopback` network configuration file:
 
 ```
-cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+cat <<EOF | tee 99-loopback.conf
 {
     "cniVersion": "0.3.1",
     "type": "loopback"
@@ -107,11 +119,7 @@ EOF
 Create the `containerd` configuration file:
 
 ```
-sudo mkdir -p /etc/containerd/
-```
-
-```
-cat << EOF | sudo tee /etc/containerd/config.toml
+cat << EOF | tee config.toml
 [plugins]
   [plugins.cri.containerd]
     snapshotter = "overlayfs"
@@ -135,14 +143,14 @@ EOF
 Create the `containerd.service` systemd unit file:
 
 ```
-cat <<EOF | sudo tee /etc/systemd/system/containerd.service
+cat <<EOF | tee containerd.service
 [Unit]
 Description=containerd container runtime
 Documentation=https://containerd.io
 After=network.target
 
 [Service]
-ExecStartPre=/sbin/modprobe overlay
+ExecStartPre=
 ExecStart=/bin/containerd
 Restart=always
 RestartSec=5
@@ -162,16 +170,19 @@ EOF
 
 ```
 {
-  sudo mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
-  sudo mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
-  sudo mv ca.pem /var/lib/kubernetes/
+for instance in worker-0 worker-1 worker-2; do
+  lxc file push ${instance}-key.pem ${instance}/var/lib/kubelet/ 
+  lxc file push ${instance}.pem ${instance}/var/lib/kubelet/
+  lxc file push ${instance}.kubeconfig ${instance}/var/lib/kubelet/kubeconfig 
+  lxc file push ca.pem ${instance}/var/lib/kubernetes/
+done
 }
 ```
 
 Create the `kubelet-config.yaml` configuration file:
 
 ```
-cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml
+cat <<EOF | tee kubelet-config.yaml
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
 authentication:
@@ -199,7 +210,7 @@ EOF
 Create the `kubelet.service` systemd unit file:
 
 ```
-cat <<EOF | sudo tee /etc/systemd/system/kubelet.service
+cat <<EOF | tee kubelet.service
 [Unit]
 Description=Kubernetes Kubelet
 Documentation=https://github.com/kubernetes/kubernetes
@@ -227,26 +238,28 @@ EOF
 ### Configure the Kubernetes Proxy
 
 ```
-sudo mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
+for instance in worker-0 worker-1 worker-2; do  
+  lxc file push kube-proxy.kubeconfig ${instance}/var/lib/kube-proxy/kubeconfig
+done
 ```
 
 Create the `kube-proxy-config.yaml` configuration file:
 
 ```
-cat <<EOF | sudo tee /var/lib/kube-proxy/kube-proxy-config.yaml
+cat <<EOF | tee kube-proxy-config.yaml
 kind: KubeProxyConfiguration
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
   kubeconfig: "/var/lib/kube-proxy/kubeconfig"
 mode: "iptables"
-clusterCIDR: "10.200.0.0/16"
+clusterCIDR: "10.0.2.0/16"
 EOF
 ```
 
 Create the `kube-proxy.service` systemd unit file:
 
 ```
-cat <<EOF | sudo tee /etc/systemd/system/kube-proxy.service
+cat <<EOF | tee kube-proxy.service
 [Unit]
 Description=Kubernetes Kube Proxy
 Documentation=https://github.com/kubernetes/kubernetes
@@ -261,18 +274,34 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
+### Copy all the configuration files to all workers
+
+```
+for instance in worker-0 worker-1 worker-2; do
+    lxc file push 10-bridge.conf ${instance}/etc/cni/net.d/
+    lxc file push 99-loopback.conf ${instance}/etc/cni/net.d/
+    lxc file push config.toml ${instance}/etc/containerd/
+    lxc file push containerd.service ${instance}/etc/systemd/system/
+    lxc file push kubelet-config.yaml ${instance}/var/lib/kubelet/
+    lxc file push kubelet.service ${instance}/etc/systemd/system/
+    lxc file push kube-proxy-config.yaml ${instance}/var/lib/kube-proxy/
+    lxc file push kube-proxy.service ${instance}/etc/systemd/system/
+done
+```
+
 
 ### Start the Worker Services
 
 ```
 {
-  sudo systemctl daemon-reload
-  sudo systemctl enable containerd kubelet kube-proxy
-  sudo systemctl start containerd kubelet kube-proxy
+for instance in worker-0 worker-1 worker-2; do
+  lxc exec ${instance} -- systemctl daemon-reload
+  lxc exec ${instance} -- systemctl enable containerd kubelet kube-proxy
+  lxc exec ${instance} -- systemctl start containerd kubelet kube-proxy
+done
 }
 ```
 
-> Remember to run the above commands on each worker node: `worker-0`, `worker-1`, and `worker-2`.
 
 ## Verification
 
@@ -281,8 +310,7 @@ EOF
 List the registered Kubernetes nodes:
 
 ```
-gcloud compute ssh controller-0 \
-  --command "kubectl get nodes --kubeconfig admin.kubeconfig"
+  kubectl get nodes --kubeconfig admin.kubeconfig
 ```
 
 > output
