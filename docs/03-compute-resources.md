@@ -119,11 +119,7 @@ lxc exec worker-${i} -- sudo netplan apply
 done
 ```
 
-Now, stop all containers and start all of them:
-```
-lxc stop --all
-```
-
+Now, start all containers:
 ```
 lxc start --all
 ```
