@@ -103,7 +103,7 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --kubelet-https=true \\
   --runtime-config=api/all \\
   --service-account-key-file=/var/lib/kubernetes/service-account.pem \\
-  --service-cluster-ip-range=10.0.1.0/24 \\
+  --service-cluster-ip-range=10.0.2.0/24 \\
   --service-node-port-range=30000-32767 \\
   --tls-cert-file=/var/lib/kubernetes/kubernetes.pem \\
   --tls-private-key-file=/var/lib/kubernetes/kubernetes-key.pem \\
@@ -135,7 +135,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 [Service]
 ExecStart=/usr/local/bin/kube-controller-manager \\
   --address=0.0.0.0 \\
-  --cluster-cidr=10.0.1.0/16 \\
+  --cluster-cidr=10.0.2.0/16 \\
   --cluster-name=kubernetes \\
   --cluster-signing-cert-file=/var/lib/kubernetes/ca.pem \\
   --cluster-signing-key-file=/var/lib/kubernetes/ca-key.pem \\
@@ -229,6 +229,8 @@ In one of the controllers, run the following command:
 kubectl get componentstatuses --kubeconfig admin.kubeconfig
 ```
 
+You will have to move the ```/home/ubuntu/``` folder to run this command.
+
 ```
 NAME                 STATUS    MESSAGE              ERROR
 controller-manager   Healthy   ok
@@ -238,7 +240,7 @@ etcd-0               Healthy   {"health": "true"}
 etcd-1               Healthy   {"health": "true"}
 ```
 
-Test the ahproxy:
+Test the haproxy:
 
 ## RBAC for Kubelet Authorization
 
@@ -249,7 +251,7 @@ In this section you will configure RBAC permissions to allow the Kubernetes API 
 
 Create the `system:kube-apiserver-to-kubelet` [ClusterRole](https://kubernetes.io/docs/admin/authorization/rbac/#role-and-clusterrole) with permissions to access the Kubelet API and perform most common tasks associated with managing pods:
 
-For this part of the lab, we will send the commands to haproxy, which will loadbalance to the controllers, for that, update the admin.kubeconfig to the haproxy address on the main server, do not change the file on any of the controllers:
+For this part of the lab, we will send the commands to haproxy, which will loadbalance to the controllers, for that, update the admin.kubeconfig to the haproxy address on the server you used to create the lxc containers, do not change the file on any of the controllers:
 
 ```
  vi admin.kubeconfig
