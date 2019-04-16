@@ -67,10 +67,10 @@ lxc stop --all
 Attach the networks to the containers:
 ```
 for i in 0 1 2; do
-  lxc network attach kube1 controller-${i}
-  lxc network attach kube0 controller-${i}  
-  lxc network attach kube1 worker-${i}
-  lxc network attach kube0 worker-${i}  
+  lxc network attach kube0 controller-${i}
+  lxc network attach kube1 controller-${i}  
+  lxc network attach kube0 worker-${i}
+  lxc network attach kube1 worker-${i}  
 done
 ```
 
