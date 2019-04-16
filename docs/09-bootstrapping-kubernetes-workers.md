@@ -78,7 +78,7 @@ Install the worker binaries:
 For CIDR range we will use the internal network:
 
 ```
-POD_CIDR=10.0.2.0/24
+POD_CIDR=10.32.0.0/24
 ```
 
 Create the `bridge` network configuration file:
@@ -197,7 +197,7 @@ authorization:
   mode: Webhook
 clusterDomain: "cluster.local"
 clusterDNS:
-  - "10.0.1.10"
+  - "10.32.0.10"
 podCIDR: "${POD_CIDR}"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
