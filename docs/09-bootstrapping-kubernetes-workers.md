@@ -78,7 +78,7 @@ Install the worker binaries:
 For CIDR range we will use the internal network:
 
 ```
-POD_CIDR=10.0.2.0/24
+POD_CIDR=10.200.0.0/16
 ```
 
 Create the `bridge` network configuration file:
@@ -256,7 +256,7 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
   kubeconfig: "/var/lib/kube-proxy/kubeconfig"
 mode: "iptables"
-clusterCIDR: "10.0.2.0/16"
+clusterCIDR: "10.200.0.0/16"
 conntrack:
   max: 0
   maxPerCore: 0
