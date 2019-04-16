@@ -224,34 +224,6 @@ done
 
 ### Verification
 
-In one of the controllers, run the following command:
-
-```
-kubectl get componentstatuses --kubeconfig admin.kubeconfig
-```
-
-You will have to move the ```/home/ubuntu/``` folder to run this command.
-
-```
-NAME                 STATUS    MESSAGE              ERROR
-controller-manager   Healthy   ok
-scheduler            Healthy   ok
-etcd-2               Healthy   {"health": "true"}
-etcd-0               Healthy   {"health": "true"}
-etcd-1               Healthy   {"health": "true"}
-```
-
-Test the haproxy:
-
-## RBAC for Kubelet Authorization
-
-In this section you will configure RBAC permissions to allow the Kubernetes API Server to access the Kubelet API on each worker node. Access to the Kubelet API is required for retrieving metrics, logs, and executing commands in pods.
-
-> This tutorial sets the Kubelet `--authorization-mode` flag to `Webhook`. Webhook mode uses the [SubjectAccessReview](https://kubernetes.io/docs/admin/authorization/#checking-api-access) API to determine authorization.
-
-
-Create the `system:kube-apiserver-to-kubelet` [ClusterRole](https://kubernetes.io/docs/admin/authorization/rbac/#role-and-clusterrole) with permissions to access the Kubelet API and perform most common tasks associated with managing pods:
-
 For this part of the lab, we will send the commands to haproxy, which will loadbalance to the controllers, for that, update the admin.kubeconfig to the haproxy address on the server you used to create the lxc containers, do not change the file on any of the controllers:
 
 ```
@@ -281,8 +253,36 @@ users:
     client-certificate-data:<CERTIFICATE DATA NOT REPRODUCED HERE>
     client-key-data:<CERTIFICATE DATA NOT REPRODUCED HERE>
 ```  
+
+Now check the status of the components:
+
+```
+kubectl get componentstatuses --kubeconfig admin.kubeconfig
+```
+
+You will have to move the ```/home/ubuntu/``` folder to run this command.
+
+```
+NAME                 STATUS    MESSAGE              ERROR
+controller-manager   Healthy   ok
+scheduler            Healthy   ok
+etcd-2               Healthy   {"health": "true"}
+etcd-0               Healthy   {"health": "true"}
+etcd-1               Healthy   {"health": "true"}
+```
+
+
+
+## RBAC for Kubelet Authorization
+
+In this section you will configure RBAC permissions to allow the Kubernetes API Server to access the Kubelet API on each worker node. Access to the Kubelet API is required for retrieving metrics, logs, and executing commands in pods.
+
+> This tutorial sets the Kubelet `--authorization-mode` flag to `Webhook`. Webhook mode uses the [SubjectAccessReview](https://kubernetes.io/docs/admin/authorization/#checking-api-access) API to determine authorization.
+
+
+Create the `system:kube-apiserver-to-kubelet` [ClusterRole](https://kubernetes.io/docs/admin/authorization/rbac/#role-and-clusterrole) with permissions to access the Kubelet API and perform most common tasks associated with managing pods:
   
-Now you can create the roles on the cluster:
+
 
 ```
 cat <<EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
