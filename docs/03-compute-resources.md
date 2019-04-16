@@ -32,7 +32,6 @@ Create the 3 workers:
 for i in 0 1 2; do
   lxc launch images:ubuntu/18.04/amd64 worker-${i} -p kube-profile -s lxd-storage
 done
-
 ```
 
 Check if all the containers are created:
@@ -69,9 +68,9 @@ Attach the networks to the containers:
 ```
 for i in 0 1 2; do
   lxc network attach kube1 controller-${i}
-  lxc network attach kube0 controller-${i}
+  lxc network attach kube0 controller-${i}  
   lxc network attach kube1 worker-${i}
-  lxc network attach kube0 worker-${i}
+  lxc network attach kube0 worker-${i}  
 done
 ```
 
