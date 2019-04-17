@@ -172,8 +172,6 @@ EOF
 
 ### Configure the Kubelet
 
-```
-```
 
 Create the `kubelet-config.yaml` configuration file:
 
@@ -200,11 +198,17 @@ clusterDNS:
 podCIDR: "${POD_CIDR}"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
-tlsCertFile: "/var/lib/kubelet/${instance}.pem"
-tlsPrivateKeyFile: "/var/lib/kubelet/${instance}-key.pem"
+tlsCertFile: "/var/lib/kubelet/worker-${instance}.pem"
+tlsPrivateKeyFile: "/var/lib/kubelet/worker-${instance}-key.pem"
 EOF
 
 lxc file push kubelet-config.yaml worker-${instance}/var/lib/kubelet/
+
+lxc file push worker-${instance}-key.pem  worker-${instance}/var/lib/kubelet/
+lxc file push worker-${instance}.pem worker-${instance}/var/lib/kubelet/
+lxc file push worker-${instance}.kubeconfig worker-${instance}/var/lib/kubelet/kubeconfig
+lxc file push ca.pem worker-${instance}/var/lib/kubernetes/
+
 done
 ```
 
