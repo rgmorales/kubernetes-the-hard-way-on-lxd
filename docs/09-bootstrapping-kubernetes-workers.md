@@ -75,12 +75,6 @@ Install the worker binaries:
 
 ### Configure CNI Networking
 
-For CIDR range we will use the internal network:
-
-```
-
-```
-
 Create the `bridge` network configuration file:
 
 ```
@@ -179,20 +173,15 @@ EOF
 ### Configure the Kubelet
 
 ```
-{
-for instance in worker-0 worker-1 worker-2; do
-  lxc file push ${instance}-key.pem ${instance}/var/lib/kubelet/ 
-  lxc file push ${instance}.pem ${instance}/var/lib/kubelet/
-  lxc file push ${instance}.kubeconfig ${instance}/var/lib/kubelet/kubeconfig 
-  lxc file push ca.pem ${instance}/var/lib/kubernetes/
-done
-}
 ```
 
 Create the `kubelet-config.yaml` configuration file:
 
 ```
-for instance in worker-0 worker-1 worker-2; do
+for instance in 0 1 2; do
+
+POD_CIDR=10.1.${instance}.0/16
+
 cat <<EOF | tee kubelet-config.yaml
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
@@ -215,7 +204,7 @@ tlsCertFile: "/var/lib/kubelet/${instance}.pem"
 tlsPrivateKeyFile: "/var/lib/kubelet/${instance}-key.pem"
 EOF
 
-lxc file push kubelet-config.yaml ${instance}/var/lib/kubelet/
+lxc file push kubelet-config.yaml worker-${instance}/var/lib/kubelet/
 done
 ```
 
@@ -325,7 +314,7 @@ done
 List the registered Kubernetes nodes:
 
 ```
-  kubectl get nodes --kubeconfig admin.kubeconfig
+kubectl get nodes --kubeconfig admin.kubeconfig
 ```
 
 > output
