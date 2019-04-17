@@ -78,12 +78,17 @@ Install the worker binaries:
 For CIDR range we will use the internal network:
 
 ```
-POD_CIDR=10.200.0.0/16
+
 ```
 
 Create the `bridge` network configuration file:
 
 ```
+{
+for instance in 0 1 2; do
+
+POD_CIDR=10.1.${instance}.0/16
+
 cat <<EOF | tee 10-bridge.conf
 {
     "cniVersion": "0.3.1",
@@ -101,6 +106,11 @@ cat <<EOF | tee 10-bridge.conf
     }
 }
 EOF
+
+lxc file push 10-bridge.conf worker-${instance}/etc/cni/net.d/
+
+done
+}
 ```
 
 Create the `loopback` network configuration file:
@@ -284,8 +294,7 @@ EOF
 ### Copy all the configuration files to all workers
 
 ```
-for instance in worker-0 worker-1 worker-2; do
-    lxc file push 10-bridge.conf ${instance}/etc/cni/net.d/
+for instance in worker-0 worker-1 worker-2; do    
     lxc file push 99-loopback.conf ${instance}/etc/cni/net.d/
     lxc file push config.toml ${instance}/etc/containerd/
     lxc file push containerd.service ${instance}/etc/systemd/system/    
