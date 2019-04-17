@@ -59,11 +59,6 @@ All containers should be running, but they have no network assigned to them. You
 +--------------+---------+------+------+------------+-----------+
 ````
 
-Stop all the containers:
-```
-lxc stop --all 
-```
-
 Attach the networks to the containers:
 ```
 for i in 0 1 2; do
@@ -119,9 +114,9 @@ lxc exec worker-${i} -- sudo netplan apply
 done
 ```
 
-Now, start all containers:
+Now, restart all containers:
 ```
-lxc start --all
+lxc restart --all
 ```
 
 Now list all the containers and check for the network configurations:
