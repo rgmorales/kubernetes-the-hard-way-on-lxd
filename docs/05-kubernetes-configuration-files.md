@@ -13,7 +13,7 @@ Each kubeconfig requires a Kubernetes API Server to connect to. To support high 
 Use the static IP address from the Load Balance:
 
 ```
-KUBERNETES_PUBLIC_ADDRESS=KUBERNETES_PUBLIC_ADDRESS=$(lxc info controller-0 | grep --only-matching  '10.0.1.[0-9]*')
+KUBERNETES_PUBLIC_ADDRESS=$(lxc info controller-0 | grep --only-matching  '10.0.1.[0-9]*')
 ```
 
 ### The kubelet Kubernetes Configuration File
