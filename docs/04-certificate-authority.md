@@ -297,7 +297,7 @@ Generate the Kubernetes API Server certificate and private key:
 ```
 {
 
-KUBERNETES_PUBLIC_ADDRESS=10.0.1.100
+KUBERNETES_PUBLIC_ADDRESS=10.0.1.10
 
 cat > kubernetes-csr.json <<EOF
 {
