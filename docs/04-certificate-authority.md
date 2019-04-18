@@ -132,7 +132,7 @@ cat > worker-${i}-csr.json <<EOF
 }
 EOF
 
-EXTERNAL_IP=10.0.1.2${i}
+EXTERNAL_IP=$(lxc info worker-${i} | grep --only-matching  '10.0.1.[0-9]*')
 
 INTERNAL_IP=10.0.2.2${i}
 
