@@ -77,12 +77,7 @@ cat <<EOF |tee 10-lxc.yaml
 network:
   version: 2
   ethernets:
-    eth0:
-       dhcp4: no
-       addresses: [10.0.1.1${i}/24]
-       gateway4: 10.0.1.1
-       nameservers:
-         addresses: [8.8.8.8,8.8.4.4]
+    eth0: {dhcp4: true}    
     eth1:
        dhcp4: no
        addresses: [10.0.2.1${i}/24]       
@@ -96,12 +91,7 @@ cat <<EOF |tee 10-lxc.yaml
 network:
   version: 2
   ethernets:
-    eth0:
-       dhcp4: no
-       addresses: [10.0.1.2${i}/24]
-       gateway4: 10.0.1.1
-       nameservers:
-         addresses: [8.8.8.8,8.8.4.4]
+    eth0: {dhcp4: true}       
     eth1:
        dhcp4: no
        addresses: [10.0.2.2${i}/24]       
