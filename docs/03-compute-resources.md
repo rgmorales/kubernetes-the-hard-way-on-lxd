@@ -172,4 +172,42 @@ You can check if the containers can ping each other:
 lxc exec worker-0 -- ping 10.0.2.22
 ```
 
+## Configuring HAProxy container
+
+We need to install HAProxy on our HAProxy container and configure it to load balance to all controllers:
+
+```
+lxc exec haproxy -- apt-get update
+```
+
+```
+lxc exec haproxy -- apt-get install -y haproxy
+```
+
+Update the configuration file with the IPs from the controllers: (Make sure you assign the eth0 IP addresses from your deployment)
+
+```
+lxc exec haproxy -- sudo vi /etc/haproxy/haproxy.cfg
+```
+
+Include the following lines in the end of the file, with your eth0 controller IPS:
+
+``` 
+frontend haproxynode
+    bind *:6443
+    mode tcp
+    option tcplog
+    default_backend backendnodes
+backend backendnodes
+    mode tcp
+    option tcplog
+    option tcp-check
+    balance roundrobin
+    default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100
+    server node1 10.0.1.17:6443 check
+    server node2 10.0.1.33:6443 check
+    server node3 10.0.1.96:6443 check
+```
+
+
 Next: [Provisioning a CA and Generating TLS Certificates](04-certificate-authority.md)
