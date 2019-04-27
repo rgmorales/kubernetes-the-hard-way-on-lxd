@@ -193,6 +193,7 @@ lxc exec haproxy -- sudo vi /etc/haproxy/haproxy.cfg
 Include the following lines in the end of the file, with your eth0 controller IPS:
 
 ``` 
+lxc exec haproxy -- sudo tee -a /etc/haproxy/haproxy.cfg << END
 frontend haproxynode
     bind *:6443
     mode tcp
@@ -204,9 +205,16 @@ backend backendnodes
     option tcp-check
     balance roundrobin
     default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100
-    server node1 10.0.1.17:6443 check
-    server node2 10.0.1.33:6443 check
-    server node3 10.0.1.96:6443 check
+END
+
+for i in 0 1 2; do
+EXTERNAL_IP=$(lxc info controller-${i} | grep --only-matching  '10.0.1.[0-9]*')
+lxc exec haproxy -- sudo tee -a /etc/haproxy/haproxy.cfg << END
+    server node1 ${EXTERNAL_IP}:6443 check
+END
+done
+
+lxc exec haproxy -- sudo service haproxy restart
 ```
 
 
