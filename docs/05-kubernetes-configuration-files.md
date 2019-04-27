@@ -8,12 +8,12 @@ In this section you will generate kubeconfig files for the `controller manager`,
 
 ### Kubernetes Public IP Address
 
-Each kubeconfig requires a Kubernetes API Server to connect to. To support high availability the IP address assigned to the external load balancer fronting the Kubernetes API Servers will be used.
+Each kubeconfig requires a Kubernetes API Server to connect to. To support high availability the IP address assigned to the external load balancer fronting the Kubernetes API Servers will be used. In our case, the load balancer is the HAProxy container. It is a single container and a single point of failure. For production deployments, another solution should be used.
 
 Use the static IP address from the Load Balance:
 
 ```
-KUBERNETES_PUBLIC_ADDRESS=$(lxc info controller-0 | grep --only-matching  '10.0.1.[0-9]*')
+KUBERNETES_PUBLIC_ADDRESS=10.0.1.100
 ```
 
 ### The kubelet Kubernetes Configuration File
