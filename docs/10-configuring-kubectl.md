@@ -6,7 +6,7 @@ In this lab you will generate a kubeconfig file for the `kubectl` command line u
 
 ## The Admin Kubernetes Configuration File
 
-Each kubeconfig requires a Kubernetes API Server to connect to. To support high availability the IP address assigned to the external load balancer fronting the Kubernetes API Servers will be used.
+Each kubeconfig requires a Kubernetes API Server to connect to. To support high availability the IP address assigned to the HAProxy fronting the Kubernetes API Servers will be used.
 
 Generate a kubeconfig file suitable for authenticating as the `admin` user:
 
