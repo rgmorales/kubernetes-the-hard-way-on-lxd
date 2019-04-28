@@ -4,12 +4,6 @@ In this lab you will bootstrap the Kubernetes control plane across three compute
 
 ## Prerequisites
 
-We will execute the commands in this lab  on each controller instance: `controller-0`, `controller-1`, and `controller-2`. Using the lxc commands for that, example:
-
-```
-lxc exec ${instance} -- ${command}
-```
-
 Create the Kubernetes configuration directory:
 
 ```
