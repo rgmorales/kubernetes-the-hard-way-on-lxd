@@ -330,4 +330,14 @@ worker-1   Ready    <none>   36s   v1.12.0
 worker-2   Ready    <none>   36s   v1.12.0
 ```
 
+## SWAP issues
+
+If your nodes failed to start, there is a good chance that Kubelet is failing because swap is active. One way to fix this is to disable swap in your main server, not the container, with the command:
+
+```
+sudo swapoff -a
+```
+
+You need good amounth of memory to run everything without Swap. This Lab was tested in a machine with 32GB of ram.
+
 Next: [Configuring kubectl for Remote Access](10-configuring-kubectl.md)
