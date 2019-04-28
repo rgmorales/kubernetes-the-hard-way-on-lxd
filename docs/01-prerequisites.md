@@ -44,7 +44,7 @@ create the profile configuration yaml with the following content:
 ```
 cat <<EOF |tee kube-profile.yaml 
 config:
-  limits.cpu: "1"
+  limits.cpu: "2"
   limits.memory.swap: "false"
   boot.autostart: "false"
   linux.kernel_modules: ip_tables,ip6_tables,netlink_diag,nf_nat,overlay,br_netfilter
