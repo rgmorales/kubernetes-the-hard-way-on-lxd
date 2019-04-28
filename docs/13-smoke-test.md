@@ -177,8 +177,7 @@ NODE_PORT=$(kubectl get svc nginx \
 Retrieve the external IP address of a worker instance:
 
 ```
-EXTERNAL_IP=$(gcloud compute instances describe worker-0 \
-  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
+EXTERNAL_IP=$(lxc info worker-0 | grep --only-matching  '10.0.1.[0-9]*')
 ```
 
 Make an HTTP request using the external IP address and the `nginx` node port:
