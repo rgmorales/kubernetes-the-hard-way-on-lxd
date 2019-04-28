@@ -10,22 +10,42 @@ In this lab you will create a route for each worker node that maps the node's Po
 
 In this section you will gather the information required to create routes in the `kubernetes-the-hard-way` VPC network.
 
-Print the internal IP address and Pod CIDR range for each worker instance:
-
+Print the internal IP address for the workers, by checking the networking on the lxc containers:
 ```
-for instance in worker-0 worker-1 worker-2; do
-  gcloud compute instances describe ${instance} \
-    --format 'value[separator=" "](networkInterfaces[0].networkIP,metadata.items[0].value)'
-done
+lxc list 
 ```
 
 > output
 
 ```
-10.240.0.20 10.200.0.0/24
-10.240.0.21 10.200.1.0/24
-10.240.0.22 10.200.2.0/24
++--------------+---------+-------------------+------+------------+-----------+
+|     NAME     |  STATE  |       IPV4        | IPV6 |    TYPE    | SNAPSHOTS |
++--------------+---------+-------------------+------+------------+-----------+
+| controller-0 | RUNNING | 10.0.2.10 (eth1)  |      | PERSISTENT | 0         |
+|              |         | 10.0.1.39 (eth0)  |      |            |           |
++--------------+---------+-------------------+------+------------+-----------+
+| controller-1 | RUNNING | 10.0.2.11 (eth1)  |      | PERSISTENT | 0         |
+|              |         | 10.0.1.252 (eth0) |      |            |           |
++--------------+---------+-------------------+------+------------+-----------+
+| controller-2 | RUNNING | 10.0.2.12 (eth1)  |      | PERSISTENT | 0         |
+|              |         | 10.0.1.111 (eth0) |      |            |           |
++--------------+---------+-------------------+------+------------+-----------+
+| haproxy      | RUNNING | 10.0.1.100 (eth0) |      | PERSISTENT | 0         |
++--------------+---------+-------------------+------+------------+-----------+
+| worker-0     | RUNNING | 10.1.0.1 (cnio0)  |      | PERSISTENT | 0         |
+|              |         | 10.0.2.20 (eth1)  |      |            |           |
+|              |         | 10.0.1.37 (eth0)  |      |            |           |
++--------------+---------+-------------------+------+------------+-----------+
+| worker-1     | RUNNING | 10.1.1.1 (cnio0)  |      | PERSISTENT | 0         |
+|              |         | 10.0.2.21 (eth1)  |      |            |           |
+|              |         | 10.0.1.134 (eth0) |      |            |           |
++--------------+---------+-------------------+------+------------+-----------+
+| worker-2     | RUNNING | 10.1.2.1 (cnio0)  |      | PERSISTENT | 0         |
+|              |         | 10.0.2.22 (eth1)  |      |            |           |
+|              |         | 10.0.1.187 (eth0) |      |            |           |
++--------------+---------+-------------------+------+------------+-----------+
 ```
+The internal IPs are on the eth1 network adapter.
 
 ## Routes
 
@@ -33,17 +53,16 @@ Create network routes for each worker instance:
 
 ```
 for i in 0 1 2; do
-  gcloud compute routes create kubernetes-route-10-200-${i}-0-24 \
-    --network kubernetes-the-hard-way \
-    --next-hop-address 10.240.0.2${i} \
-    --destination-range 10.200.${i}.0/24
+  lxc exec worker-${i} -- ip route add 10.200.0.0/24 via 10.0.2.20 dev eth1
 done
 ```
 
-List the routes in the `kubernetes-the-hard-way` VPC network:
+List the routes in all workers:
 
 ```
-gcloud compute routes list --filter "network: kubernetes-the-hard-way"
+for i in 0 1 2; do
+  lxc exec worker-${i} -- ip route 
+done
 ```
 
 > output
