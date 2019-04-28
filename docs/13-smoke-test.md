@@ -247,7 +247,7 @@ INSTANCE_NAME=$(kubectl get pod untrusted --output=jsonpath='{.spec.nodeName}')
 SSH into the worker node:
 
 ```
-gcloud compute ssh ${INSTANCE_NAME}
+lxc exec ${INSTANCE_NAME} -- /bin/bash
 ```
 
 List the containers running under gVisor:
