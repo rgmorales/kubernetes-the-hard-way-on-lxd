@@ -200,8 +200,7 @@ frontend haproxynode
     option tcplog
     default_backend backendnodes
 backend backendnodes
-    mode tcp
-    option tcplog
+    mode tcp    
     option tcp-check
     balance roundrobin
     default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100
@@ -210,7 +209,7 @@ END
 for i in 0 1 2; do
 EXTERNAL_IP=$(lxc info controller-${i} | grep --only-matching  '10.0.1.[0-9]*')
 lxc exec haproxy -- sudo tee -a /etc/haproxy/haproxy.cfg << END
-    server node1 ${EXTERNAL_IP}:6443 check
+    server node${i} ${EXTERNAL_IP}:6443 check
 END
 done
 
