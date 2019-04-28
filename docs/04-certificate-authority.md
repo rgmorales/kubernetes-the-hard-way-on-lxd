@@ -297,7 +297,7 @@ Generate the Kubernetes API Server certificate and private key:
 ```
 {
 
-KUBERNETES_PUBLIC_ADDRESS=$(lxc info controller-0 | grep --only-matching  '10.0.1.[0-9]*')
+KUBERNETES_PUBLIC_ADDRESS=10.0.1.100
 
 cat > kubernetes-csr.json <<EOF
 {
