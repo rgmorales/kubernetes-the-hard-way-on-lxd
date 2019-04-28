@@ -68,6 +68,7 @@ All containers should be running, but they have no network assigned to them. You
 
 Attach the networks to the containers:
 ```
+{
 for i in 0 1 2; do
   lxc network attach kube0 controller-${i}
   lxc network attach kube1 controller-${i}  
@@ -75,6 +76,7 @@ for i in 0 1 2; do
   lxc network attach kube1 worker-${i}  
 done
 lxc network attach kube0 haproxy
+}
 ```
 
 Now we will create the yaml files for networking for each container, and push the file to the container. After that, we will apply the networking configuration on each container:
@@ -115,6 +117,7 @@ done
 Create the network configuration for the HAProxy:
 
 ```
+{
 cat <<EOF |tee 10-lxc.yaml
 network:
   version: 2
@@ -130,6 +133,7 @@ EOF
 sudo lxc file push 10-lxc.yaml haproxy/etc/netplan/
 
 lxc exec haproxy -- sudo netplan apply
+}
 ```
 
 Now, restart all containers:
