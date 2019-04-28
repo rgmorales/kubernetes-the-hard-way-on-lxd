@@ -188,15 +188,11 @@ lxc exec haproxy -- apt-get update
 lxc exec haproxy -- apt-get install -y haproxy
 ```
 
-Update the configuration file with the IPs from the controllers: (Make sure you assign the eth0 IP addresses from your deployment)
 
-```
-lxc exec haproxy -- sudo vi /etc/haproxy/haproxy.cfg
-```
-
-Include the following lines in the end of the file, with your eth0 controller IPS:
+Include needed lines in the end of the file, with your eth0 controller IPS:
 
 ``` 
+{
 lxc exec haproxy -- sudo tee -a /etc/haproxy/haproxy.cfg << END
 frontend haproxynode
     bind *:6443
@@ -219,7 +215,15 @@ END
 done
 
 lxc exec haproxy -- sudo service haproxy restart
+}
 ```
+
+Check the configuration file for the IPs from the controllers: (Make sure it was assigned the eth0 IP addresses from your deployment)
+
+```
+lxc exec haproxy -- sudo vi /etc/haproxy/haproxy.cfg
+```
+
 
 
 Next: [Provisioning a CA and Generating TLS Certificates](04-certificate-authority.md)
