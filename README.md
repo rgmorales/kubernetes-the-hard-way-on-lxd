@@ -1,11 +1,12 @@
 # Kubernetes The Hard Way on LXD
 This tutorial is based on Kelsey's tutorial to deploy Kubernetes the hard way, but using LXC containers in a single host. 
 Some modifications in the config files are required in order to run all servers in a single node.
-One major reason for bottleneck can be the disk IO needed, making an SSD or M.2 card a must. While deploying etcd on 3 containers, you will see a lot of io requests to store and retrieve data. Spinning disks will make this impossible to deploy.
+One major reason for bottleneck can be the disk IO needed, making a SSD or M.2 card a must. While deploying etcd on 3 containers, you will see a lot of io requests to store and retrieve data. Spinning disks will make this lab impossible to deploy.
 
-The original excellent guide from Kelsey can be found here: [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way)
+The original excellent guide from Kelsey can be found here: [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way). This guide is an adaptation to his guide, and many steps exactly the same. 
+This guide has some shell scripts to execute operations on containers. While executing those command, take in consideration what you would do in several production servers.
 
-You can also deploy Kubernetes using juju and conjure, but that is the easy way ;)
+You can also deploy Kubernetes using juju and conjure, but that whould be the easy way ;)
 
 # Kubernetes The Hard Way
 
