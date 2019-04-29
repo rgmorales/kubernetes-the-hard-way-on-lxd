@@ -15,3 +15,7 @@ lxc network delete kube0
 lxc network delete kube1
 }
 ```
+
+You can also go to the folder where you executed all the commands and delete all the configuration files, and downloaded files for the labs.
+
+Have fun!
