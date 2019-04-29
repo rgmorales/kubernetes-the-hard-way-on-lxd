@@ -65,4 +65,5 @@ worker-1   Ready    <none>   118s   v1.12.0
 worker-2   Ready    <none>   118s   v1.12.0
 ```
 
-Next: [Provisioning Pod Network Routes](11-pod-network-routes.md)
+Next: [Deploying the DNS Cluster Add-on](11-dns-addon.md)
+
