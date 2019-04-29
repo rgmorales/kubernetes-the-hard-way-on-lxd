@@ -5,5 +5,5 @@ After considering several options, like buying used servers, Intel Nuc, and othe
 
 Here is the list of materials and price to build this mini "server":
 
-Complete list(https://pcpartpicker.com/list/qLMWkd)
+[Complete list](https://pcpartpicker.com/list/qLMWkd)
 
