@@ -8,7 +8,7 @@ If you never used LXD on your host, you need to initialize it:
 lxd init
 ```
 
-Create a new storage pool, and selecr the backend to be dir, this is the only supported backend for our tutorial.
+Create a new storage pool, and select the backend to be dir, this is the only supported backend for this tutorial.
 During the creation of the network bridge, do not select ipv6, typing none for it. Your command should look like this:
 
 ```
