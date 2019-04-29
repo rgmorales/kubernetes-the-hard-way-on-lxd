@@ -104,7 +104,10 @@ network:
     eth0: {dhcp4: true}       
     eth1:
        dhcp4: no
-       addresses: [10.0.2.2${i}/24]       
+       addresses: [10.0.2.2${i}/24]
+       routes:
+           - to: 10.200.${i}.0/24
+             via: 10.0.2.2${i}
 EOF
 
 sudo lxc file push 10-lxc.yaml worker-${i}/etc/netplan/
