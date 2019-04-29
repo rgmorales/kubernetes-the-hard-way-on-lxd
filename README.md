@@ -6,8 +6,6 @@ One major reason for bottleneck can be the disk IO needed, making a SSD or M.2 c
 The original excellent guide from Kelsey can be found here: [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way). This guide is an adaptation to his guide, and many steps exactly the same. 
 This guide has some shell scripts to execute operations on containers. While executing those command, take in consideration what you would do in several production servers.
 
-You can also deploy Kubernetes using juju and conjure, but that whould be the easy way ;)
-
 # Kubernetes The Hard Way
 
 This tutorial walks you through setting up Kubernetes the hard way in a single host using LXC containers. This guide is not for people looking for a fully automated command to bring up a Kubernetes cluster. If that's what you are looking for, then check out [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or the [Getting Started Guides](http://kubernetes.io/docs/getting-started-guides/). For a complete deployment using juju on LXD, you can use [conjure](https://tutorials.ubuntu.com/tutorial/install-kubernetes-with-conjure-up#0) Please note that the deployment with conjure is slightly differen than this tutorial and uses different components and versions.
@@ -15,6 +13,8 @@ This tutorial walks you through setting up Kubernetes the hard way in a single h
 Kubernetes The Hard Way is optimized for learning, which means taking the long route to ensure you understand each task required to bootstrap a Kubernetes cluster.
 
 > The results of this tutorial should not be viewed as production ready, and may receive limited support from the community, but don't let that stop you from learning!
+
+You can try this tutorial in a VM created on Virtualbox, make sure to create the VM in a host with and SSD or M.2 card for storage.
 
 ## Target Audience
 
