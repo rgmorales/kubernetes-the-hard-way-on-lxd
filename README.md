@@ -1,10 +1,10 @@
 # Kubernetes The Hard Way on LXD
-This tutorial is based on Kelsey's tutorial to deploy Kubernetes the hard way, but using LXC containers in a single host. 
+This tutorial is based on Kelsey's Hightower tutorial to deploy Kubernetes the hard way, but using LXC containers in a single host. 
 Some modifications in the config files are required in order to run all servers in a single node.
 One major reason for bottleneck can be the disk IO needed, making a SSD or M.2 card a must. While deploying etcd on 3 containers, you will see a lot of io requests to store and retrieve data. Spinning disks will make this lab impossible to deploy.
 
-The original excellent guide from Kelsey can be found here: [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way). This guide is an adaptation to his guide, and many steps exactly the same. 
-This guide has some shell scripts to execute operations on containers. While executing those command, take in consideration what you would do in several production servers.
+The original excellent guide from Kelsey can be found here: [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way). This guide is an adaptation to his guide, and many steps are exactly the same. 
+This guide has some shell scripts to execute operations on containers. While executing those commands, take in consideration what would you do in several production servers.
 
 # Kubernetes The Hard Way
 
@@ -14,7 +14,7 @@ Kubernetes The Hard Way is optimized for learning, which means taking the long r
 
 > The results of this tutorial should not be viewed as production ready, and may receive limited support from the community, but don't let that stop you from learning!
 
-You can try this tutorial in a VM created on Virtualbox, make sure to create the VM in a host with and SSD or M.2 card for storage.
+You can try this tutorial in a VM created with Virtualbox, make sure to create the VM in a host with and SSD or M.2 card for storage.
 
 ## Target Audience
 
