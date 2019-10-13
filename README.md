@@ -24,16 +24,16 @@ The target audience for this tutorial is someone planning to support a productio
 
 Kubernetes The Hard Way guides you through bootstrapping a highly available Kubernetes cluster with end-to-end encryption between components and RBAC authentication.
 
-* [Kubernetes](https://github.com/kubernetes/kubernetes) 1.12.0
+* [Kubernetes](https://github.com/kubernetes/kubernetes) 1.15.3
 * [containerd Container Runtime](https://github.com/containerd/containerd) 1.2.0-rc.0
 * [gVisor](https://github.com/google/gvisor) 50c283b9f56bb7200938d9e207355f05f79f0d17
-* [CNI Container Networking](https://github.com/containernetworking/cni) 0.6.0
+* [CNI Container Networking](https://github.com/containernetworking/cni) 0.8.2
 * [etcd](https://github.com/coreos/etcd) v3.3.9
 * [CoreDNS](https://github.com/coredns/coredns) v1.2.2
 
 ## Labs
 
-This tutorial assumes you have a server with Ubuntu 18.04 installed, and an SSD or M.2 disk where the containers will be running.
+This tutorial assumes you have a server with Ubuntu 18.04 or 16.04 installed, and an SSD or M.2 disk where the containers will be running.
 
 * [Prerequisites](docs/01-prerequisites.md)
 * [Installing the Client Tools](docs/02-client-tools.md)
@@ -49,3 +49,5 @@ This tutorial assumes you have a server with Ubuntu 18.04 installed, and an SSD 
 * [Deploying the DNS Cluster Add-on](docs/12-dns-addon.md)
 * [Smoke Test](docs/13-smoke-test.md)
 * [Cleaning Up](docs/14-cleanup.md)
+
+Note: I used Virtualbox Ubuntu Server on my Mac :)
