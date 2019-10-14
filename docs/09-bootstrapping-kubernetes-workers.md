@@ -26,7 +26,7 @@ wget -q --show-progress --https-only --timestamping \
   https://github.com/opencontainers/runc/releases/download/v1.0.0-rc5/runc.amd64 \
 
   https://github.com/containernetworking/plugins/releases/download/v0.8.2/cni-plugins-linux-amd64-v0.8.2.tgz
-  https://github.com/containerd/containerd/releases/download/v1.2.0-rc.0/containerd-1.2.0-rc.0.linux-amd64.tar.gz \
+  https://github.com/containerd/containerd/releases/download/v1.2.10/containerd-1.2.10.linux-amd64.tar.gz
   https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kubectl \
   https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kube-proxy \
   https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kubelet
@@ -65,11 +65,11 @@ Install the worker binaries:
     
     lxc file push crictl-v1.15.0-linux-amd64.tar.gz ${instance}/home/ubuntu/
     lxc file push cni-plugins-linux-amd64-v0.8.2.tgz ${instance}/home/ubuntu/
-    lxc file push containerd-1.2.0-rc.0.linux-amd64.tar.gz ${instance}/home/ubuntu/
+    lxc file push containerd-1.2.10.linux-amd64.tar.gz ${instance}/home/ubuntu/
     
     lxc exec ${instance} -- tar -xvf /home/ubuntu/crictl-v1.15.0-linux-amd64.tar.gz -C /usr/local/bin/
     lxc exec ${instance} -- tar -xvf /home/ubuntu/cni-plugins-linux-amd64-v0.8.2.tgz -C /opt/cni/bin/
-    lxc exec ${instance} -- tar -xvf /home/ubuntu/containerd-1.2.0-rc.0.linux-amd64.tar.gz -C /    
+    lxc exec ${instance} -- tar -xvf /home/ubuntu/containerd-1.2.10.linux-amd64.tar.gz -C /    
   done
 }
 ```
@@ -307,7 +307,7 @@ done
 for instance in worker-0 worker-1 worker-2; do
   lxc exec ${instance} -- systemctl daemon-reload
   lxc exec ${instance} -- systemctl enable containerd kubelet kube-proxy
-  lxc exec ${instance} -- systemctl start containerd kubelet kube-proxy
+  
 done
 }
 ```
