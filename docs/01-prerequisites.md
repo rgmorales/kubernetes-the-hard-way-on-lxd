@@ -5,7 +5,7 @@
 If you never used LXD on your host, you need to initialize it:
 Ensure you have lxc version 3.0 and above; Note: These lxc instructions does not work in version 2.x
 
-Just a little notes on installing the right version on ubuntu 16.04
+Just a little notes on installing the right version on ubuntu 18.04
 ```
 sudo apt clean
 apt install -t xenial-backports lxd lxd-client
@@ -14,9 +14,7 @@ sudo apt update
 ```
 Create a new storage pool, and select the backend to be dir, this is the only supported backend for this tutorial.
 ```
-lxc init ubuntu:18.04 -s lxd-storage # this command is not needed, this is only for testing incase you run into issues
 lxc storage create lxd-storage dir
-lxc launch ubuntu:18.04 testmachine -s lxd-storage # this command is only for testing
 
 ```
 
