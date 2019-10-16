@@ -306,6 +306,7 @@ done
 for instance in worker-0 worker-1 worker-2; do
   lxc exec ${instance} -- systemctl daemon-reload
   lxc exec ${instance} -- systemctl enable containerd kubelet kube-proxy
+  lxc exec ${instance} -- systemctl start containderd kubelet kube-proxy
   
 done
 }
