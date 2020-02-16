@@ -51,3 +51,6 @@ This tutorial assumes you have a server with Ubuntu 18.04 or 16.04 installed, an
 * [Cleaning Up](docs/14-cleanup.md)
 
 Note: I used Virtualbox Ubuntu Server on my Mac :)
+I also ran using Multipass; If you have very little available memory resource (say 8GB), I recommend this option.
+https://multipass.run/
+I was able to run the entire k8s cluster (3+1+3) with less than 2GB :)
