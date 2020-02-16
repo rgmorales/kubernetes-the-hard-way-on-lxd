@@ -20,6 +20,10 @@ configmap/coredns created
 deployment.extensions/coredns created
 service/kube-dns created
 ```
+## Note:
+
+The replicaset needs to be bumped up from 2 to 3, with the above command there will be only 2 core-dns pods running.
+Modify the core-dns deployment accordingly.
 
 List all the containers, now you should see that the workers have an extra cni network configured:
 ```
@@ -111,5 +115,6 @@ Address 1: 10.32.0.10 kube-dns.kube-system.svc.cluster.local
 Name:      kubernetes
 Address 1: 10.32.0.1 kubernetes.default.svc.cluster.local
 ```
+If you dont get expected ouput, try checking core-dns pods. There should be 3 instances running.
 
 Next: [Smoke Test](12-smoke-test.md)
