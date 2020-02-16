@@ -8,7 +8,6 @@ Ensure you have lxc version 3.0 and above; Note: These lxc instructions does not
 Just a little notes on installing the right version on ubuntu 18.04
 ```
 sudo apt clean
-apt install -t xenial-backports lxd lxd-client
 sudo apt install -t xenial-backports lxd lxd-client
 sudo apt update
 ```
