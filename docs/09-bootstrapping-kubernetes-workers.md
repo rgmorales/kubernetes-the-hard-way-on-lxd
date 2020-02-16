@@ -328,7 +328,15 @@ Note: There is hack that needs to be done on all worker nodes, ensure this is in
 ln -s /dev/console /dev/kmsg
 
 ```
-
+## Recommendation
+Have a handy shell script that you will run everytime when you restart worker nodes
+```
+{
+for instance in worker-0 worker-1 worker-2; do
+  lxc exec ${instance} -- ln -s /dev/console /dev/kmsg
+done
+}
+```
 ## Verification
 
 > The compute instances created in this tutorial will not have permission to complete this section. Run the following commands from the same machine used to create the compute instances.
