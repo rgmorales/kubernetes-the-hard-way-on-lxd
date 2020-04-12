@@ -20,17 +20,23 @@ configmap/coredns created
 deployment.extensions/coredns created
 service/kube-dns created
 ```
+
 ## Note:
 
 The replicaset needs to be bumped up from 2 to 3, with the above command there will be only 2 core-dns pods running.
 Modify the core-dns deployment accordingly.
 
 List all the containers, now you should see that the workers have an extra cni network configured:
+
 ```
-lxc list 
+lxc list
+
 ```
+
 > output
+
 ```
+
 +--------------+---------+-------------------+------+------------+-----------+
 |     NAME     |  STATE  |       IPV4        | IPV6 |    TYPE    | SNAPSHOTS |
 +--------------+---------+-------------------+------+------------+-----------+
@@ -63,14 +69,17 @@ List the pods created by the `kube-dns` deployment:
 
 ```
 kubectl get pods -l k8s-app=kube-dns -n kube-system
+
 ```
 
 > output
 
 ```
+
 NAME                       READY   STATUS    RESTARTS   AGE
 coredns-699f8ddd77-94qv9   1/1     Running   0          20s
 coredns-699f8ddd77-gtcgb   1/1     Running   0          20s
+
 ```
 
 ## Verification
@@ -78,43 +87,56 @@ coredns-699f8ddd77-gtcgb   1/1     Running   0          20s
 Create a `busybox` deployment:
 
 ```
+
 kubectl run busybox --image=busybox:1.28 --command -- sleep 3600
+
 ```
 
 List the pod created by the `busybox` deployment:
 
 ```
+
 kubectl get pods -l run=busybox
+
 ```
 
 > output
 
 ```
+
 NAME                      READY   STATUS    RESTARTS   AGE
 busybox-bd8fb7cbd-vflm9   1/1     Running   0          10s
+
 ```
 
 Retrieve the full name of the `busybox` pod:
 
 ```
+
 POD_NAME=$(kubectl get pods -l run=busybox -o jsonpath="{.items[0].metadata.name}")
+
 ```
 
 Execute a DNS lookup for the `kubernetes` service inside the `busybox` pod:
 
 ```
+
 kubectl exec -ti $POD_NAME -- nslookup kubernetes
+
 ```
 
 > output
 
 ```
+
 Server:    10.32.0.10
 Address 1: 10.32.0.10 kube-dns.kube-system.svc.cluster.local
 
 Name:      kubernetes
 Address 1: 10.32.0.1 kubernetes.default.svc.cluster.local
+
 ```
+
 If you dont get expected ouput, try checking core-dns pods. There should be 3 instances running.
 
 Next: [Smoke Test](12-smoke-test.md)

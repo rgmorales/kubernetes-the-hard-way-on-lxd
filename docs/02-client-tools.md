@@ -74,7 +74,7 @@ The `kubectl` command line utility is used to interact with the Kubernetes API S
 ### OS X
 
 ```
-curl -o kubectl https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/darwin/amd64/kubectl
+curl -o kubectl https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/darwin/amd64/kubectl
 ```
 
 ```

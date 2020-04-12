@@ -54,6 +54,6 @@ This tutorial assumes you have a server with Ubuntu 18.04, and an SSD or M.2 dis
 - [Smoke Test](docs/13-smoke-test.md)
 - [Cleaning Up](docs/14-cleanup.md)
 
-I also ran using Multipass; If you have very little available memory resource (say 8GB), I recommend this option.
-https://multipass.run/
+I ran using Multipass; If you have very little available memory (say 8GB), I recommend this option.
+[https://multipass.run](https://multipass.run/)
 I was able to run the entire k8s cluster (3+1+3 nodes) with less than 2GB.

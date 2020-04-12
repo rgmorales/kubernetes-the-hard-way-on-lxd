@@ -60,10 +60,9 @@ kubectl get nodes
 
 ```
 NAME       STATUS   ROLES    AGE    VERSION
-worker-0   Ready    <none>   117s   v1.15.3
-worker-1   Ready    <none>   118s   v1.15.3
-worker-2   Ready    <none>   118s   v1.15.3
+worker-0   Ready    <none>   117s   v1.18.0
+worker-1   Ready    <none>   118s   v1.18.0
+worker-2   Ready    <none>   118s   v1.18.0
 ```
 
 Next: [Deploying the DNS Cluster Add-on](11-dns-addon.md)
-
