@@ -1,8 +1,6 @@
-
 # Installing the Client Tools
 
 In this lab you will install the command line utilities required to complete this tutorial: [cfssl](https://github.com/cloudflare/cfssl), [cfssljson](https://github.com/cloudflare/cfssl), and [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl).
-
 
 ## Install CFSSL
 
@@ -90,7 +88,7 @@ sudo mv kubectl /usr/local/bin/
 ### Linux
 
 ```
-wget https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kubectl
+wget https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
 ```
 
 ```
@@ -108,7 +106,5 @@ Verify `kubectl` version 1.15.3 or higher is installed:
 ```
 kubectl version --client
 ```
-
-
 
 Next: [Provisioning Compute Resources](03-compute-resources.md)
