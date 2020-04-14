@@ -49,10 +49,9 @@ This tutorial assumes you have a server with Ubuntu 18.04, and an SSD or M.2 dis
 - [Bootstrapping the Kubernetes Control Plane](docs/08-bootstrapping-kubernetes-controllers.md)
 - [Bootstrapping the Kubernetes Worker Nodes](docs/09-bootstrapping-kubernetes-workers.md)
 - [Configuring kubectl for Remote Access](docs/10-configuring-kubectl.md)
-- [Provisioning Pod Network Routes](docs/11-pod-network-routes.md)
-- [Deploying the DNS Cluster Add-on](docs/12-dns-addon.md)
-- [Smoke Test](docs/13-smoke-test.md)
-- [Cleaning Up](docs/14-cleanup.md)
+- [Deploying the DNS Cluster Add-on](docs/11-dns-addon.md)
+- [Smoke Test](docs/12-smoke-test.md)
+- [Cleaning Up](docs/13-cleanup.md)
 
 I ran using Multipass; If you have very little available memory (say 8GB), I recommend this option.
 [https://multipass.run](https://multipass.run/)
