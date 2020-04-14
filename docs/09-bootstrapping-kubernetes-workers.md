@@ -21,14 +21,14 @@ done
 
 ```
 wget -q --show-progress --https-only --timestamping \
-  https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.12.0/crictl-v1.12.0-linux-amd64.tar.gz \
+  https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.18.0/crictl-v1.18.0-linux-amd64.tar.gz \
   https://storage.googleapis.com/kubernetes-the-hard-way/runsc-50c283b9f56bb7200938d9e207355f05f79f0d17 \
   https://github.com/opencontainers/runc/releases/download/v1.0.0-rc5/runc.amd64 \
-  https://github.com/containernetworking/plugins/releases/download/v0.6.0/cni-plugins-amd64-v0.6.0.tgz \
-  https://github.com/containerd/containerd/releases/download/v1.2.0-rc.0/containerd-1.2.0-rc.0.linux-amd64.tar.gz \
-  https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubectl \
-  https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-proxy \
-  https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubelet
+  https://github.com/containernetworking/plugins/releases/download/v0.8.2/cni-plugins-linux-amd64-v0.8.2.tgz \
+  https://github.com/containerd/containerd/releases/download/v1.2.10/containerd-1.2.10.linux-amd64.tar.gz \
+  https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl \
+  https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kube-proxy \
+  https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubelet
 ```
 
 Create the installation directories:
@@ -53,22 +53,22 @@ Install the worker binaries:
 {
   sudo mv runsc-50c283b9f56bb7200938d9e207355f05f79f0d17 runsc
   sudo mv runc.amd64 runc
-  chmod +x kubectl kube-proxy kubelet runc runsc  
-  
+  chmod +x kubectl kube-proxy kubelet runc runsc
+
   for instance in worker-0 worker-1 worker-2; do
     lxc file push kubectl ${instance}/usr/local/bin/
     lxc file push kube-proxy ${instance}/usr/local/bin/
     lxc file push kubelet ${instance}/usr/local/bin/
     lxc file push runc ${instance}/usr/local/bin/
     lxc file push runsc ${instance}/usr/local/bin/
-    
-    lxc file push crictl-v1.12.0-linux-amd64.tar.gz ${instance}/home/ubuntu/
-    lxc file push cni-plugins-amd64-v0.6.0.tgz ${instance}/home/ubuntu/
-    lxc file push containerd-1.2.0-rc.0.linux-amd64.tar.gz ${instance}/home/ubuntu/
-    
-    lxc exec ${instance} -- tar -xvf /home/ubuntu/crictl-v1.12.0-linux-amd64.tar.gz -C /usr/local/bin/
-    lxc exec ${instance} -- tar -xvf /home/ubuntu/cni-plugins-amd64-v0.6.0.tgz -C /opt/cni/bin/
-    lxc exec ${instance} -- tar -xvf /home/ubuntu/containerd-1.2.0-rc.0.linux-amd64.tar.gz -C /    
+
+    lxc file push crictl-v1.18.0-linux-amd64.tar.gz ${instance}/home/ubuntu/
+    lxc file push cni-plugins-linux-amd64-v0.8.2.tgz ${instance}/home/ubuntu/
+    lxc file push containerd-1.2.10.linux-amd64.tar.gz ${instance}/home/ubuntu/
+
+    lxc exec ${instance} -- tar -xvf /home/ubuntu/crictl-v1.18.0-linux-amd64.tar.gz -C /usr/local/bin/
+    lxc exec ${instance} -- tar -xvf /home/ubuntu/cni-plugins-linux-amd64-v0.8.2.tgz -C /opt/cni/bin/
+    lxc exec ${instance} -- tar -xvf /home/ubuntu/containerd-1.2.10.linux-amd64.tar.gz -C /
   done
 }
 ```
@@ -81,7 +81,7 @@ Create the `bridge` network configuration file:
 {
 for instance in 0 1 2; do
 
-POD_CIDR=10.1.${instance}.0/16
+POD_CIDR=10.1.1${instance}.0/24
 
 cat <<EOF | tee 10-bridge.conf
 {
@@ -172,7 +172,6 @@ EOF
 
 ### Configure the Kubelet
 
-
 Create the `kubelet-config.yaml` configuration file:
 
 ```
@@ -212,7 +211,7 @@ lxc file push ca.pem worker-${instance}/var/lib/kubernetes/
 done
 ```
 
-> The `resolvConf` configuration is used to avoid loops when using CoreDNS for service discovery on systems running `systemd-resolved`. 
+> The `resolvConf` configuration is used to avoid loops when using CoreDNS for service discovery on systems running `systemd-resolved`.
 
 Create the `kubelet.service` systemd unit file:
 
@@ -233,6 +232,7 @@ ExecStart=/usr/local/bin/kubelet \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
   --network-plugin=cni \\
   --register-node=true \\
+  --fail-swap-on=false \\
   --v=2
 Restart=on-failure
 RestartSec=5
@@ -245,7 +245,7 @@ EOF
 ### Configure the Kubernetes Proxy
 
 ```
-for instance in worker-0 worker-1 worker-2; do  
+for instance in worker-0 worker-1 worker-2; do
   lxc file push kube-proxy.kubeconfig ${instance}/var/lib/kube-proxy/kubeconfig
 done
 ```
@@ -284,19 +284,19 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
+
 ### Copy all the configuration files to all workers
 
 ```
-for instance in worker-0 worker-1 worker-2; do    
+for instance in worker-0 worker-1 worker-2; do
     lxc file push 99-loopback.conf ${instance}/etc/cni/net.d/
     lxc file push config.toml ${instance}/etc/containerd/
-    lxc file push containerd.service ${instance}/etc/systemd/system/    
+    lxc file push containerd.service ${instance}/etc/systemd/system/
     lxc file push kubelet.service ${instance}/etc/systemd/system/
     lxc file push kube-proxy-config.yaml ${instance}/var/lib/kube-proxy/
     lxc file push kube-proxy.service ${instance}/etc/systemd/system/
 done
 ```
-
 
 ### Start the Worker Services
 
@@ -306,6 +306,7 @@ for instance in worker-0 worker-1 worker-2; do
   lxc exec ${instance} -- systemctl daemon-reload
   lxc exec ${instance} -- systemctl enable containerd kubelet kube-proxy
   lxc exec ${instance} -- systemctl start containerd kubelet kube-proxy
+
 done
 }
 ```
@@ -318,8 +319,26 @@ If your nodes failed to start (check the journalctl in one of the workers), ther
 sudo swapoff -a
 ```
 
-You need at least 16GB of memory to run everything without Swap with some performance. This Lab was tested in a machine with 32GB of ram.
+You need at least 8GB of memory to run everything without Swap with some performance. This Lab was tested in a machine with 8GB of ram.
 
+Note: There is hack that needs to be done on all worker nodes, ensure this is in place when you restart the nodes
+
+```
+ln -s /dev/console /dev/kmsg
+
+```
+
+## Recommendation
+
+Have a handy shell script that you will run everytime when you restart worker nodes
+
+```
+{
+for instance in worker-0 worker-1 worker-2; do
+  lxc exec ${instance} -- ln -s /dev/console /dev/kmsg
+done
+}
+```
 
 ## Verification
 
@@ -335,11 +354,9 @@ kubectl get nodes --kubeconfig admin.kubeconfig
 
 ```
 NAME       STATUS   ROLES    AGE   VERSION
-worker-0   Ready    <none>   35s   v1.12.0
-worker-1   Ready    <none>   36s   v1.12.0
-worker-2   Ready    <none>   36s   v1.12.0
+worker-0   Ready    <none>   35s   v1.18.0
+worker-1   Ready    <none>   36s   v1.18.0
+worker-2   Ready    <none>   36s   v1.18.0
 ```
-
-
 
 Next: [Configuring kubectl for Remote Access](10-configuring-kubectl.md)

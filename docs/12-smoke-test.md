@@ -173,7 +173,6 @@ NODE_PORT=$(kubectl get svc nginx \
   --output=jsonpath='{range .spec.ports[0]}{.nodePort}')
 ```
 
-
 Retrieve the external IP address of a worker instance:
 
 ```
@@ -230,13 +229,13 @@ Verify the `untrusted` pod is running:
 ```
 kubectl get pods -o wide
 ```
+
 ```
 NAME                       READY     STATUS    RESTARTS   AGE       IP           NODE
 busybox-68654f944b-djjjb   1/1       Running   0          5m        10.200.0.2   worker-0
 nginx-65899c769f-xkfcn     1/1       Running   0          4m        10.200.1.2   worker-1
 untrusted                  1/1       Running   0          10s       10.200.0.3   worker-0
 ```
-
 
 Get the node name where the `untrusted` pod is running:
 
@@ -255,6 +254,7 @@ List the containers running under gVisor:
 ```
 sudo runsc --root  /run/containerd/runsc/k8s.io list
 ```
+
 ```
 I0930 19:27:13.255142   20832 x:0] ***************************
 I0930 19:27:13.255326   20832 x:0] Args: [runsc --root /run/containerd/runsc/k8s.io list]
