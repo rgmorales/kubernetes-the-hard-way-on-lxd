@@ -16,6 +16,8 @@ lxc network create kube1 ipv6.address=none ipv4.address=10.0.2.1/24 ipv4.nat=fal
 
 We will now create the lxc containers 
 
+Note: Based on the architecture and version of ubuntu replace the image accordingly. For eg., "ubuntu/bionic/cloud/arm64", if you are using ARM64 architecture and ubuntu 20.04
+
 ## Controllers
 
 Create the three controllers:
@@ -152,24 +154,24 @@ Now list all the containers and check for the network configurations:
 +--------------+---------+-------------------+------+------------+-----------+
 |     NAME     |  STATE  |       IPV4        | IPV6 |    TYPE    | SNAPSHOTS |
 +--------------+---------+-------------------+------+------------+-----------+
-| controller-0 | RUNNING | 10.0.2.10 (eth1)  |      | PERSISTENT | 0         |
+| controller-0 | RUNNING | 10.0.2.10 (eth1)  |      | CONTAINER  | 0         |
 |              |         | 10.0.1.17 (eth0)  |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
-| controller-1 | RUNNING | 10.0.2.11 (eth1)  |      | PERSISTENT | 0         |
+| controller-1 | RUNNING | 10.0.2.11 (eth1)  |      | CONTAINER  | 0         |
 |              |         | 10.0.1.33 (eth0)  |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
-| controller-2 | RUNNING | 10.0.2.12 (eth1)  |      | PERSISTENT | 0         |
+| controller-2 | RUNNING | 10.0.2.12 (eth1)  |      | CONTAINER  | 0         |
 |              |         | 10.0.1.96 (eth0)  |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
-| haproxy      | RUNNING | 10.0.1.100 (eth0) |      | PERSISTENT | 0         |
+| haproxy      | RUNNING | 10.0.1.100 (eth0) |      | CONTAINER  | 0         |
 +--------------+---------+-------------------+------+------------+-----------+
-| worker-0     | RUNNING | 10.0.2.20 (eth1)  |      | PERSISTENT | 0         |
+| worker-0     | RUNNING | 10.0.2.20 (eth1)  |      | CONTAINER  | 0         |
 |              |         | 10.0.1.111 (eth0) |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
-| worker-1     | RUNNING | 10.0.2.21 (eth1)  |      | PERSISTENT | 0         |
+| worker-1     | RUNNING | 10.0.2.21 (eth1)  |      | CONTAINER  | 0         |
 |              |         | 10.0.1.189 (eth0) |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
-| worker-2     | RUNNING | 10.0.2.22 (eth1)  |      | PERSISTENT | 0         |
+| worker-2     | RUNNING | 10.0.2.22 (eth1)  |      | CONTAINER  | 0         |
 |              |         | 10.0.1.152 (eth0) |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
 ```

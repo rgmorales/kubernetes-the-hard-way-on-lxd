@@ -15,7 +15,8 @@ Download the official etcd release binaries from the [coreos/etcd](https://githu
 
 ```
 wget -q --show-progress --https-only --timestamping \
-  "https://github.com/coreos/etcd/releases/download/v3.3.20/etcd-v3.3.20-linux-amd64.tar.gz"
+  "https://github.com/etcd-io/etcd/releases/download/v3.4.15/etcd-v3.4.15-linux-amd64.tar.gz"
+
 ```
 
 Extract and install the `etcd` server and the `etcdctl` command line utility:
@@ -23,10 +24,30 @@ Extract and install the `etcd` server and the `etcdctl` command line utility:
 ```
 {
 for instance in controller-0 controller-1 controller-2; do
-  lxc file push etcd-v3.3.20-linux-amd64.tar.gz ${instance}/home/ubuntu/
-  lxc exec ${instance} -- tar -xvf /home/ubuntu/etcd-v3.3.20-linux-amd64.tar.gz -C /home/ubuntu/
-  lxc exec ${instance} -- mv /home/ubuntu/etcd-v3.3.20-linux-amd64/etcd /usr/local/bin/
-  lxc exec ${instance} -- mv /home/ubuntu/etcd-v3.3.20-linux-amd64/etcdctl /usr/local/bin/
+  lxc file push etcd-v3.4.15-linux-amd64.tar.gz ${instance}/home/ubuntu/
+  lxc exec ${instance} -- tar -xvf /home/ubuntu/etcd-v3.4.15-linux-amd64.tar.gz -C /home/ubuntu/
+  lxc exec ${instance} -- mv /home/ubuntu/etcd-v3.4.15-linux-amd64/etcd /usr/local/bin/
+  lxc exec ${instance} -- mv /home/ubuntu/etcd-v3.4.15-linux-amd64/etcdctl /usr/local/bin/
+done
+}
+```
+If ARM64 architecture, then use below link
+
+```
+wget -q --show-progress --https-only --timestamping \
+  "https://github.com/etcd-io/etcd/releases/download/v3.4.15/etcd-v3.4.15-linux-arm64.tar.gz"
+
+```
+
+Extract and install the `etcd` server and the `etcdctl` command line utility:
+
+```
+{
+for instance in controller-0 controller-1 controller-2; do
+  lxc file push etcd-v3.4.15-linux-arm64.tar.gz ${instance}/home/ubuntu/
+  lxc exec ${instance} -- tar -xvf /home/ubuntu/etcd-v3.4.15-linux-arm64.tar.gz -C /home/ubuntu/
+  lxc exec ${instance} -- mv /home/ubuntu/etcd-v3.4.15-linux-arm64/etcd /usr/local/bin/
+  lxc exec ${instance} -- mv /home/ubuntu/etcd-v3.4.15-linux-arm64/etcdctl /usr/local/bin/
 done
 }
 ```
@@ -93,6 +114,8 @@ done
 }
 ```
 
+
+
 ### Start the etcd Server
 
 ```
@@ -120,7 +143,6 @@ Execute the verification command:
 ```
 ETCDCTL_API=3 etcdctl member list --endpoints=https://127.0.0.1:2379 --cacert=/etc/etcd/ca.pem --cert=/etc/etcd/kubernetes.pem --key=/etc/etcd/kubernetes-key.pem
 ```
-
 > output
 
 ```

@@ -27,16 +27,16 @@ The target audience for this tutorial is someone planning to support a productio
 
 Kubernetes The Hard Way guides you through bootstrapping a highly available Kubernetes cluster with end-to-end encryption between components and RBAC authentication.
 
-- [Kubernetes](https://github.com/kubernetes/kubernetes) 1.18.0
-- [containerd Container Runtime](https://github.com/containerd/containerd) 1.2.0-rc.0
+- [Kubernetes](https://github.com/kubernetes/kubernetes) 1.22.3
+- [containerd Container Runtime](https://github.com/containerd/containerd) 1.4.4
 - [gVisor](https://github.com/google/gvisor) 50c283b9f56bb7200938d9e207355f05f79f0d17
-- [CNI Container Networking](https://github.com/containernetworking/cni) 0.8.2
-- [etcd](https://github.com/coreos/etcd) v3.3.20
-- [CoreDNS](https://github.com/coredns/coredns) v1.2.2
+- [CNI Container Networking](https://github.com/containernetworking/cni) 0.9.1
+- [etcd](https://github.com/coreos/etcd) v3.4.15
+- [CoreDNS](https://github.com/coredns/coredns) v1.8
 
 ## Labs
 
-This tutorial assumes you have a server with Ubuntu 18.04, and an SSD or M.2 disk where the containers will be running.
+This tutorial assumes you have a server with Ubuntu 20.04, and an SSD or M.2 disk where the containers will be running.
 
 - [Multipass Instructions](docs/00-private-cloud-prerequisites.md)
 - [Prerequisites](docs/01-prerequisites.md)
@@ -53,6 +53,6 @@ This tutorial assumes you have a server with Ubuntu 18.04, and an SSD or M.2 dis
 - [Smoke Test](docs/12-smoke-test.md)
 - [Cleaning Up](docs/13-cleanup.md)
 
-I ran using Multipass; If you have very little available memory (say 8GB), I recommend this option.
+I ran using Multipass; If you have very little memory (say 8GB), I recommend this option.
 [https://multipass.run](https://multipass.run/)
 I was able to run the entire k8s cluster (3+1+3 nodes) with less than 2GB.

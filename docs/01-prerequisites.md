@@ -3,7 +3,7 @@
 ## Initializing LXD
 
 If you never used LXD on your host, you need to initialize it:
-Ensure you have lxc version 3.0 and above; Note: These lxc instructions does not work in version 2.x
+Ensure you have lxc version 4.0 and above; Note: These lxc instructions does not work in version 2.x
 
 ### Note:
 
@@ -11,12 +11,12 @@ By default, if you have used multipass, lxd and lxc is already installed.
 
 ```
 lxc --version
-3.0.3
+4.0.8
 
 ```
 
 You may ignore if you already have lxc installed. You can skip the next step and directly go to creating storage pool
-Just a little notes on installing the right version on ubuntu 18.04
+Just a little notes on installing the right version on ubuntu 18.04, you will not need to execute below snippet if you are using ubuntu 20.04
 
 ```
 sudo apt clean
@@ -77,7 +77,6 @@ devices:
     type: disk
 EOF
 ```
-
 Now create the profile:
 
 ```

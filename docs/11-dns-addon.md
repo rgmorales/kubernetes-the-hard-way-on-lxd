@@ -7,7 +7,7 @@ In this lab you will deploy the [DNS add-on](https://kubernetes.io/docs/concepts
 Deploy the `coredns` cluster add-on:
 
 ```
-kubectl apply -f https://storage.googleapis.com/kubernetes-the-hard-way/coredns.yaml
+kubectl apply -f https://storage.googleapis.com/kubernetes-the-hard-way/coredns-1.8.yaml
 ```
 
 > output
@@ -40,26 +40,26 @@ lxc list
 +--------------+---------+-------------------+------+------------+-----------+
 |     NAME     |  STATE  |       IPV4        | IPV6 |    TYPE    | SNAPSHOTS |
 +--------------+---------+-------------------+------+------------+-----------+
-| controller-0 | RUNNING | 10.0.2.10 (eth1)  |      | PERSISTENT | 0         |
+| controller-0 | RUNNING | 10.0.2.10 (eth1)  |      | CONTAINER  | 0         |
 |              |         | 10.0.1.39 (eth0)  |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
-| controller-1 | RUNNING | 10.0.2.11 (eth1)  |      | PERSISTENT | 0         |
+| controller-1 | RUNNING | 10.0.2.11 (eth1)  |      | CONTAINER  | 0         |
 |              |         | 10.0.1.252 (eth0) |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
-| controller-2 | RUNNING | 10.0.2.12 (eth1)  |      | PERSISTENT | 0         |
+| controller-2 | RUNNING | 10.0.2.12 (eth1)  |      | CONTAINER  | 0         |
 |              |         | 10.0.1.111 (eth0) |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
-| haproxy      | RUNNING | 10.0.1.100 (eth0) |      | PERSISTENT | 0         |
+| haproxy      | RUNNING | 10.0.1.100 (eth0) |      | CONTAINER  | 0         |
 +--------------+---------+-------------------+------+------------+-----------+
-| worker-0     | RUNNING | 10.1.0.1 (cnio0)  |      | PERSISTENT | 0         |
+| worker-0     | RUNNING | 10.1.0.1 (cnio0)  |      | CONTAINER  | 0         |
 |              |         | 10.0.2.20 (eth1)  |      |            |           |
 |              |         | 10.0.1.37 (eth0)  |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
-| worker-1     | RUNNING | 10.1.1.1 (cnio0)  |      | PERSISTENT | 0         |
+| worker-1     | RUNNING | 10.1.1.1 (cnio0)  |      | CONTAINER  | 0         |
 |              |         | 10.0.2.21 (eth1)  |      |            |           |
 |              |         | 10.0.1.134 (eth0) |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
-| worker-2     | RUNNING | 10.0.2.22 (eth1)  |      | PERSISTENT | 0         |
+| worker-2     | RUNNING | 10.0.2.22 (eth1)  |      | CONTAINER  | 0         |
 |              |         | 10.0.1.187 (eth0) |      |            |           |
 +--------------+---------+-------------------+------+------------+-----------+
 
